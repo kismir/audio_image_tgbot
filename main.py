@@ -20,7 +20,7 @@ def listener(messages):
             s = subprocess.Popen(['ffmpeg', '-i', m.audio, '-ar', '16000', file_name])
 
         if m.content_type == 'photo':
-            if face_detector.detect_face():
+            if face_detector.detect_face(m.photo):
                 file_name = name+'/photo_message_'+str(user_base[name])+'.jpg'
                 user_base[name] += 1
                 s = subprocess.Popen(['ffmpeg', '-i', m.photo, file_name])
