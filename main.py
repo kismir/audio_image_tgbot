@@ -7,22 +7,26 @@ import os
 TOKEN = "$token"
 
 def listener(messages):
-    user_base = dict()
+    user_base_audio = dict()
+    user_base_photo = dict()
     for m in messages:
         name = str(m.from_user.id)
-        if name not in user_base:
-            user_base[name] = 0
-            os.mkdir(name)
+        if name not in user_base_audio:
+            user_base_audio[name] = 0
+            os.mkdir(name+str('_audio'))
+        if name not in user_base_photo:
+            user_base_photo[name] = 0
+            os.mkdir(name+str('_photo'))
 
         if m.content_type == 'audio':
-            file_name = name+'/audio_message_'+str(user_base[name])+'.wav'
-            user_base[name] += 1
+            file_name = name+str('_audio')+'/audio_message_'+str(user_base[name])+'.wav'
+            user_base_audio[name] += 1
             s = subprocess.Popen(['ffmpeg', '-i', m.audio, '-ar', '16000', file_name])
 
         if m.content_type == 'photo':
             if face_detector.detect_face(m.photo):
-                file_name = name+'/photo_message_'+str(user_base[name])+'.jpg'
-                user_base[name] += 1
+                file_name = name+str('_photo')+'/photo_message_'+str(user_base[name])+'.jpg'
+                user_base_photo[name] += 1
                 s = subprocess.Popen(['ffmpeg', '-i', m.photo, file_name])
 
 if __name__ == '__main__':
