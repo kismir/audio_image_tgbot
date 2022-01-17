@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import subprocess
+from PIL import Image
 import telebot
 import face_detector #any face detection program here 
 import os
+
 
 TOKEN = "$token"
 
@@ -27,7 +29,8 @@ def listener(messages):
             if face_detector.detect_face(m.photo):
                 file_name = name+str('_photo')+'/photo_message_'+str(user_base[name])+'.jpg'
                 user_base_photo[name] += 1
-                s = subprocess.Popen(['ffmpeg', '-i', m.photo, file_name])
+                with Image.open(m.photo) as im:
+                    im.save(file_name, "JPEG")
 
 if __name__ == '__main__':
      bot = telebot.TeleBot(TOKEN)
